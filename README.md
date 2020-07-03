@@ -2,9 +2,8 @@
 
 
  ### Intro
-# > I am just learning and trying to improve my code skills.
-#
-#
+> I am just learning and trying to improve my code skills.
+
 ### Project
 > What about project?
 > So, this application gives you opportunity to observes instagram profile
