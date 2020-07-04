@@ -42,7 +42,7 @@ def save_data(users: list):
         logging.info(f'Data was saved successfully into {file_path}')
 
 
-def extract_data(username: str) -> User:
+def extract_data(username: str) -> dict:
     profile_url = 'https://www.instagram.com/' + username + '/'
     try:
         response = requests.get(profile_url, verify=False)
