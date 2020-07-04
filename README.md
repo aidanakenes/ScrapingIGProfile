@@ -22,7 +22,7 @@ save_data(users:list) # save list of users into json file
 download_pictures(users:list) # doamload all profile pictures of the users from the provided list
 ```
 
-In the tests/test.py you can see test-code of previous functions
+In the tests/test.py you can see test-code of these functions
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
