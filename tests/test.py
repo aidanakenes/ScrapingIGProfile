@@ -12,5 +12,5 @@ def test():
 
     users = [get_user_info(username).dict() for username in usernames]
     print(users)
-    download_picture(users)
+    download_pictures(users)
     save_data(users)
