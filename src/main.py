@@ -17,7 +17,7 @@ class User(BaseModel):
     is_business: bool
 
 
-def download_picture(users: list):
+def download_pictures(users: list):
     for user in users:
         try:
             pic_url = user['profile_picture_url']
