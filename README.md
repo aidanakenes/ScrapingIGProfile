@@ -1,20 +1,28 @@
  ## ObservingInstaProfile
 
-
  ### Intro
 > I am just learning and trying to improve my code skills.
 
+## Installation
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install modules in the requirements.txt.
+
+```bash
+pip install <module_name>
+```
+
 ### Project
-> What about project?
-> So, this application gives you opportunity to observes instagram profile
-> You need only username and ... that's all!
-> You will be able to know amount of followers, followings, posts, etc.
-> In addition, you can download avatar picture in 320x320 quality of observed profile
+The application is made for observing profiles of the Instagram users: full name, bio info, number of posts, followers and followings, etc.
+You can notice functions:
 
+```python
 
-### Attention
-> Don't forget to read requirements, because I have used some libraries. You need to install
-> In the code you will see comments for comfortable and comprehend acquiring information
-#
-#
+extract_data(username:str) -> dict # extracts profile information in json format via username
+get_user_info(username:str) -> User # return object of the user with profile information
+save_data(users:list) # save list of users into json file
+download_picture(users:list) # doamload all profile pictures of the users from the provided list
+```
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
 ### THANKS FOR ATTENTION! GOOD LUCK!
