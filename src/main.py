@@ -1,77 +1,79 @@
-import requests, json
-import re, ast
+import requests, json, re, ast
+from pydantic import BaseModel, ValidationError
+import logging
 
-FILE_SAVE_PATH = 'C:/Users/Lenovo/PycharmProjects/data/'
+FILE_SAVE_PATH = 'C:/Users/Lenovo/PycharmProjects/ObservingInstagramProfile/data/'
 
 
-def download_picture(picture_url: str):
+class User(BaseModel):
+    username: str
+    fullname: str = None
+    id: str
+    url: str = None
+    bio: str = None
+    followers: int
+    followings: int
+    profile_picture_url: str = None
+    is_business: bool
+
+
+def download_picture(users: list):
+    for user in users:
+        try:
+            pic_url = user['profile_picture_url']
+            response = requests.get(pic_url, verify=False)
+            with open(FILE_SAVE_PATH + pic_url[18:35] + '.jpg', 'wb') as f:
+                f.write(response.content)
+            response.raise_for_status()
+        except Exception as e:
+            logging.error(f'Exception: {e}\n Couldn\'t save picture {pic_url}')
+
+    logging.info('Pictures were installed successfully')
+
+
+def save_data(users: list):
     try:
-        response = requests.get(picture_url, verify=False)
-        with open(FILE_SAVE_PATH + picture_url[18:35] + '.jpg', 'wb') as f:
-            f.write(response.content)
-        r.raise_for_status()
-
-    except IOError:
-        print(f'Could not read file: {f.name}')
-    except requests.exceptions.HTTPError as e:
-        raise SystemExit(err)
+        file_path = FILE_SAVE_PATH + 'insta_data.json'
+        with open(FILE_SAVE_PATH + file_name, 'w', encoding='utf-8') as f:
+            json.dump(users, f, indent=4, sort_keys=True, ensure_ascii=False)
     except Exception as e:
-        raise SystemExit(f'Cannot extract data from url: {e}')
+        logging.error(f'Exception: {e}\n Couldn\'t save data into {file_path}')
     else:
-        print('Picture was installed successfully ')
+        logging.info(f'Data was saved successfully into {file_path}')
 
 
-def get_user_info(username: str) -> dict:
+def extract_data(username: str) -> User:
     profile_url = 'https://www.instagram.com/' + username + '/'
-
     try:
         response = requests.get(profile_url, verify=False)
         html_page = response.text
         regex = r'(?<="graphql":).*(?=,"toast_)'
-        json_data = dict()
-        json_data[username] = json.loads(re.findall(regex, html_page)[0])
-        r.raise_for_status()
+        json_data = json.loads(re.findall(regex, html_page)[0])['user']
+    except requests.ConnectionError as e:
+        logging.error(f'Connection Error: failed to connect with {profile_url}')
 
-    except ValueError as e:
-        raise SystemExit(f'ValueError: {f.name}')
-    except requests.exceptions.HTTPError as e:
-        raise SystemExit(err)
-    except Exception as e:
-        raise SystemExit(f'Cannot extract data from url: {e}')
+    return json_data
+
+
+def get_user_info(username: str) -> User:
+    json_data = extract_data(username)
 
     try:
-        user = {
-            username:
-                {
-                    'biography': json_data[username]['user']['biography'],
-                    'external_url': json_data[username]['user']['external_url'],
-                    'edge_followed_by': json_data[username]['user']['edge_followed_by'],
-                    'edge_follow': json_data[username]['user']['edge_follow'],
-                    'id': json_data[username]['user']['id'],
-                    'is_business_account': json_data[username]['user']['is_business_account'],
-                    'full_name': json_data[username]['user']['full_name'],
-                    'profile_pic_url_hd': json_data[username]['user']['profile_pic_url_hd']
-                }
-        }
-    except ValueError as e:
-        raise SystemExit(f'ValueError: {f.name}')
-    except Exception as e:
-        raise SystemExit(f'Cannot get user data: {e}')
+        return User(
+            username=username,
+            fullname=json_data['full_name'],
+            id=json_data['id'],
+            url=json_data['external_url'],
+            bio=json_data['biography'],
+            followers=json_data['edge_followed_by']['count'],
+            followings=json_data['edge_follow']['count'],
+            profile_picture_url=json_data['profile_pic_url_hd'],
+            is_business=json_data['is_business_account']
+        )
+    except ValidationError as e:
+        logging.error(f'Validation Error: {e.json()}')
 
-    return user
-
-
-def save_data(user: list):
-    try:
-        with open(FILE_SAVE_PATH + 'insta_data.json', 'w', encoding='utf-8') as f:
-            json.dump(user, f, indent=4, sort_keys=True, ensure_ascii=False)
-
-    except IOError:
-        raise SystemExit(f'Could not read file: {f.name}')
-    except Exception as e:
-        raise SystemExit(f'Cannot insert data into json file: {e}')
-    else:
-        print('Data was installed successfully')
+    return None
 
 
 if __name__ == '__main__':
