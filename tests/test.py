@@ -1,20 +1,15 @@
-import requests, json
-import re, ast
-from src import*
+import src
 
-def test1():
+def test():
+    usernames = list()
     try:
         with open('usernames.txt', 'r') as f:
             text = f.read()
             usernames = ast.literal_eval(text)
-        usernames_to_save = list()
 
     except Exception as e:
-        raise SystemExit(f'{e}')
+        logging.error(f'{e}')
 
-    for u in usernames:
-        user = get_user_info(u)
-        download_picture(user[u]['profile_pic_url_hd'])
-        usernames_to_save.append(user)
-
-    save_data(usernames_to_save)
+    users = [get_user_info(username).dict() for username in usernames]
+    print(users)
+    download_picture(users)
