@@ -19,8 +19,10 @@ You can notice functions:
 extract_data(username:str) -> dict # extracts profile information in json format via username
 get_user_info(username:str) -> User # return object of the user with profile information
 save_data(users:list) # save list of users into json file
-download_picture(users:list) # doamload all profile pictures of the users from the provided list
+download_pictures(users:list) # doamload all profile pictures of the users from the provided list
 ```
+
+In the tests/test.py you can see test-code of previous functions
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
