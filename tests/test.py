@@ -13,3 +13,4 @@ def test():
     users = [get_user_info(username).dict() for username in usernames]
     print(users)
     download_picture(users)
+    save_data(users)
