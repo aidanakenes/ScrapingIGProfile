@@ -1,7 +1,7 @@
  # ObservingInstaProfile
 
  ### Intro
-> I am just learning and trying to improve my code skills.
+I am just learning and trying to improve my code skills.
 
 ## Installation
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install modules in the requirements.txt.
