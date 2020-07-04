@@ -1,4 +1,4 @@
- ## ObservingInstaProfile
+ # ObservingInstaProfile
 
  ### Intro
 > I am just learning and trying to improve my code skills.
@@ -10,7 +10,7 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install modules
 pip install <module_name>
 ```
 
-### Project
+## Project
 The application is made for observing profiles of the Instagram users: full name, bio info, number of posts, followers and followings, etc.
 You can notice functions:
 
