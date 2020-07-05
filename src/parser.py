@@ -39,6 +39,7 @@ class IGParser:
             # Todo: handle exception properly. Log response status code, response text
             logging.info(f'{r.text} [{r.status_code}]\n'
                          f'Failed to get page for {username} ')
+        return None
 
 
 if __name__ == '__main__':
