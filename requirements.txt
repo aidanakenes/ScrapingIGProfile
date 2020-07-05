@@ -1,7 +1,6 @@
-py==3.7.3
-pip==7.1.2
-requests==2.24.0
-json==2.0.9
-re==2.2.1
-logging==0.5.1.2
+certifi==2020.6.20
+chardet==3.0.4
+idna==2.10
 pydantic==1.5.1
+requests==2.24.0
+urllib3==1.25.9
