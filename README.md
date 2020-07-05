@@ -4,10 +4,10 @@
 I am just learning and trying to improve my code skills.
 
 ## Installation
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install modules in the requirements.txt.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install libraries from requirements.txt file.
 
 ```bash
-pip install <module_name>
+pip install -r requirements.txt
 ```
 
 ## Project
