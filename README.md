@@ -1,4 +1,4 @@
- # ObservingInstaProfile
+ # ScrappingIGProfile
 
  ### Intro
 I am just learning and trying to improve my code skills.
