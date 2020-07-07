@@ -9,8 +9,8 @@ def check_username(username: str) -> bool:
         logging.error('Invalid username: can contain only letters, numbers, periods and underscores')
         return False
     regex = '[^A-Za-z0-9_.]'
-    regex_res = re.compile(pattern=regex)
-    invalid = regex_res.search(username)
+    re_res = re.compile(pattern=regex)
+    invalid = re_res.search(username)
     if invalid:
         logging.error('Invalid username: length of username must be less than 30')
         return False
