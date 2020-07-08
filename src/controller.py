@@ -1,6 +1,7 @@
 import re
 from typing import Union
 from src.err_utils import ApplicationError
+from http import HTTPStatus
 from src.parser import IGParser
 from src.models import User
 
