@@ -6,4 +6,4 @@ app = FastAPI()
 
 @app.get('/profile')
 def get(username: str = Query(..., description='Collect data of IG profile')):
-    return {'info': get_user_info(username=username)}
+    return get_user_info(username=username)
