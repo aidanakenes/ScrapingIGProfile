@@ -1,9 +1,10 @@
 import re
 import json
 import requests
-import logging
-from typing import Optional
+from http import HTTPStatus
+from typing import Union
 from src.models import User
+from src.err_utils import ApplicationError
 
 
 class IGParser:
@@ -11,18 +12,18 @@ class IGParser:
     def __init__(self):
         self.ig_home = 'https://www.instagram.com/'
 
-    def get_user(self, username: str) -> Optional[User]:
+    def get_user(self, username: str) -> Union[User, ApplicationError]:
         r = requests.get(
             url=f'{self.ig_home}{username}',
-            timeout=10  # always set timeout
+            timeout=10
         )
         if r.ok:
             regex = r'(?<="graphql":).*(?=,"toast_)'
-            _user = json.loads(re.findall(pattern=regex, string=r.text)[0])['user']
-            # Todo: What exception could be raised here?
-            if _user:
+            regex_res = re.findall(pattern=regex, string=r.text)[0]
+            if regex_res:
+                _user = json.loads(regex_res)['user']
                 return User(
-                    id=_user.get('id'),  # Use .get('key') instead ['key']
+                    id=_user.get('id'),
                     url=f'{self.ig_home}{username}',
                     bio=_user.get('biography'),
                     username=username,
@@ -34,17 +35,14 @@ class IGParser:
                     profile_picture_url=_user.get('profile_pic_url_hd')
                 )
             else:
-                logging.info(f'RegEx Error: Failed to get data from {username}')
+                return ApplicationError(
+                    message=f'RegEx Error: Invalid Regex',
+                    status_code=HTTPStatus.BAD_REQUEST
+                )
         else:
-            # Todo: handle exception properly. Log response status code, response text
-            logging.info(f'{r.text} [{r.status_code}]\n'
-                         f'Failed to get page for {username} ')
-        return None
+            return ApplicationError(
+                message=f'Failed to get page for {username} ',
+                status_code=r.status_code
+            )
 
 
-if __name__ == '__main__':
-    from pprint import pprint
-
-    parser = IGParser()
-    t_user: User = parser.get_user(username='kazdream_live')
-    pprint(t_user.dict())
