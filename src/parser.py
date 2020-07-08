@@ -18,10 +18,11 @@ class IGParser:
             timeout=10
         )
         if r.ok:
-            regex = r'(?<="graphql":).*(?=,"toast_)'
-            regex_res = re.findall(pattern=regex, string=r.text)[0]
-            if regex_res:
-                _user = json.loads(regex_res)['user']
+            regex = r'(?<="graphql":{"user":).*(?=},"toast_)'
+            match = re.search(pattern=regex, string=r.text)
+            if match:
+                regex_res = re.findall(pattern=regex, string=r.text)[0]
+                _user = json.loads(regex_res)
                 return User(
                     id=_user.get('id'),
                     url=f'{self.ig_home}{username}',
@@ -37,7 +38,7 @@ class IGParser:
             else:
                 return ApplicationError(
                     message=f'RegEx Error: Invalid Regex',
-                    status_code=HTTPStatus.BAD_REQUEST
+                    status_code=HTTPStatus.INTERNAL_SERVER_ERROR
                 )
         else:
             return ApplicationError(
@@ -45,4 +46,6 @@ class IGParser:
                 status_code=r.status_code
             )
 
-
+if __name__=='__main__':
+    p = IGParser()
+    p.get_user('a.knsm')
