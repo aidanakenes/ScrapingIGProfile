@@ -9,7 +9,7 @@ def check_username(username: str) -> Union[bool, ApplicationError]:
     if len(username) > 30:
         return ApplicationError(
             message='Invalid username: length of username must be less than 30',
-            status_code=400
+            status_code=HTTPStatus.BAD_REQUEST
         )
     regex = '[^A-Za-z0-9_.]'
     regex_res = re.compile(pattern=regex)
@@ -17,7 +17,7 @@ def check_username(username: str) -> Union[bool, ApplicationError]:
     if invalid:
         return ApplicationError(
             message='Invalid username: username can contain only letters, numbers, periods and underscores',
-            status_code=400
+            status_code=HTTPStatus.BAD_REQUEST
         )
     return True
 
