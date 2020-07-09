@@ -1,9 +1,12 @@
-from fastapi import FastAPI, Query
-from src.controller import *
+from fastapi import FastAPI
+from src.service import *
 
 app = FastAPI()
 
 
-@app.get('/profile')
-def get(username: str = Query(..., description='Collect data of IG profile')):
+@app.get(
+    '/profile',
+    description='Get profile info'
+)
+def get(username: str):
     return get_user_info(username=username)
