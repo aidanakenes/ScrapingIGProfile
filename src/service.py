@@ -6,10 +6,15 @@ from src.parser import IGParser
 from src.models import User
 
 
-def check_username(username: str) -> Union[bool, ApplicationError]:
+def check_username(username: str) -> ApplicationError:
+    if username=='':
+        return ApplicationError(
+            message='Empty value',
+            status_code=HTTPStatus.BAD_REQUEST
+        )
     if len(username) > 30:
         return ApplicationError(
-            message='Invalid username: length of username must be less than 30',
+            message=f'Invalid username: length of username is {len(username)} (must be less than 30)',
             status_code=HTTPStatus.BAD_REQUEST
         )
     regex = '[^A-Za-z0-9_.]'
@@ -20,14 +25,12 @@ def check_username(username: str) -> Union[bool, ApplicationError]:
             message='Invalid username: username can contain only letters, numbers, periods and underscores',
             status_code=HTTPStatus.BAD_REQUEST
         )
-    return True
 
 
 def get_user_info(username: str) -> Union[User, ApplicationError]:
     validation = check_username(username=username)
     if isinstance(validation, ApplicationError):
         return validation
-    if validation:
-        parser = IGParser()
-        user = parser.get_user(username=username)
-        return user
+    parser = IGParser()
+    _user = parser.get_user(username=username)
+    return _user
