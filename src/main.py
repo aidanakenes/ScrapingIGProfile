@@ -15,10 +15,9 @@ app = FastAPI()
 def get(username: str = Query(..., min_length=1, max_length=30, regex='^[a-z0-9_.]{1,30}$')):
     parser = IGParser()
     try:
-        _user = parser.get_user(username=username)
         return JSONResponse(
             status_code=status.HTTP_200_OK,
-            content=jsonable_encoder({'data': _user})
+            content=jsonable_encoder({'data':  parser.get_user(username=username)})
         )
     except ApplicationError as e:
         return JSONResponse(
