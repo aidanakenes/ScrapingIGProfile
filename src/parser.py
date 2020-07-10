@@ -1,7 +1,7 @@
 import re
 import json
 import requests
-from typing import Union
+from typing import Optional
 from src.models import User
 from src.err_utils import *
 
@@ -11,7 +11,7 @@ class IGParser:
     def __init__(self):
         self.ig_home = 'https://www.instagram.com/'
 
-    def get_user(self, username: str) -> Union[User, ApplicationError, None]:
+    def get_user(self, username: str) -> Optional[User]:
         r = requests.get(
             url=f'{self.ig_home}{username}',
             timeout=10
@@ -34,6 +34,6 @@ class IGParser:
                     profile_picture_url=_user.get('profile_pic_url_hd')
                 )
             except Exception:
-                return RegexError()
+                raise RegexError()
         else:
             return None
