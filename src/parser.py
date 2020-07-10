@@ -33,7 +33,7 @@ class IGParser:
                     is_private=_user.get('is_private'),
                     profile_picture_url=_user.get('profile_pic_url_hd')
                 )
-            except Exception:
-                raise RegexError()
+            except RegexError as e:
+                raise e
         else:
             return None
