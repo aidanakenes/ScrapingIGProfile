@@ -3,6 +3,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from src.parser import IGParser
+from src.err_utils import *
 
 app = FastAPI()
 
@@ -14,16 +15,22 @@ app = FastAPI()
 def get(username: str = Query(..., min_length=1, max_length=30, regex='^[a-z0-9_.]{1,30}$')):
     parser = IGParser()
     _user = parser.get_user(username=username)
-    if _user:
-        return JSONResponse(
-            status_code=status.HTTP_200_OK,
-            content=jsonable_encoder(
-                {
-                    'data': _user,
-                    'error': None
-                }
-            )
+    err, status_code = None, 200
+
+    if isinstance(_user, ApplicationError):
+        status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        err = _user
+        _user = None
+
+    return JSONResponse(
+        status_code=status_code,
+        content=jsonable_encoder(
+            {
+                'data': _user,
+                'error': err
+            }
         )
+    )
 
 
 @app.exception_handler(RequestValidationError)
