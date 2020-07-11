@@ -49,7 +49,5 @@ class IGParser:
             else:
                 return None
         else:
-            u =ast.literal_eval(_user.decode('utf-8').replace("'", "\""))
+            u = ast.literal_eval(_user.decode('utf-8').replace("'", "\""))
             return User(**u)
-     
-        
