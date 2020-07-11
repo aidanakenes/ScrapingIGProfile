@@ -44,7 +44,7 @@ class IGParser:
                     )
                     self.rds.set(name=hash_key, value=str(user.dict()))
                     return user
-                except Exception:
+                except ValueError:
                     raise RegexError()
             else:
                 return None
