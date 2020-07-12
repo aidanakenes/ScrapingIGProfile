@@ -12,7 +12,6 @@ class IGParser:
 
     def __init__(self):
         self.ig_home = 'https://www.instagram.com/'
-        self.rds = redis.Redis(host='127.0.0.1', port=6379)
 
     def get_user(self, username: str) -> Optional[User]:
         r = requests.get(
