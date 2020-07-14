@@ -1,16 +1,19 @@
- # ScrapingIGProfile
+# Simple Instagram Profile Scraper
 
- ### Intro
-I am just learning and trying to improve my code skills.
+### ```GET /profile```
+Query parameters:<br>
+**username**: str *<i>required</i> - Instagram user profile e.g. __brckhmptn__
 
-## Installation
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install libraries from requirements.txt file.
-
-```bash
-pip install -r requirements.txt
+### Sample request
+```
+GET /profile?username=brckhmptn
 ```
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-### THANKS FOR ATTENTION! GOOD LUCK!
+### Sample response
+```
+{
+    'data': {
+                '': '',
+            } 
+}
+```

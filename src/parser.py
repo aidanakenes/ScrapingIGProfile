@@ -1,8 +1,6 @@
 import re
 import json
 import requests
-import hashlib
-import ast
 from typing import Optional
 from src.models import User
 from src.err_utils import *
@@ -38,6 +36,4 @@ class IGParser:
                 return user
             except ValueError:
                 raise RegexError()
-        else:
-            return None
 
