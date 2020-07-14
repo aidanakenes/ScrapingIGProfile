@@ -2,9 +2,11 @@ from fastapi import FastAPI, Request, status, Query
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
+import redis
+import json, ast
 from src.parser import IGParser
 from src.err_utils import *
-from src.cache import Cache
+
 app = FastAPI()
 
 
@@ -13,20 +15,25 @@ app = FastAPI()
     description='Get profile info'
 )
 def get(username: str = Query(..., min_length=1, max_length=30, regex='^[a-z0-9_.]{1,30}$')):
-    cache = Cache()
-    cached = cache.get(username)
+    my_redis = redis.Redis(host='127.0.0.1', port=6379)
+    cached = my_redis.get(username)
     if cached:
-        return cached
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content=jsonable_encoder({'data': json.loads(cached.decode('utf-8'))})
+        )
     else:
         parser = IGParser()
         try:
             _user = parser.get_user(username=username)
-            cache.save_cache(_user)
+            my_redis.setex(name=username, time=3600,
+                           value=json.dumps(_user.dict(), indent=4, sort_keys=True, ensure_ascii=False))
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
                 content=jsonable_encoder({'data': _user})
             )
-        except ApplicationError as e:
+
+        except ApplicationError or redis.AuthenticationError as e:
             return JSONResponse(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 content=jsonable_encoder(
