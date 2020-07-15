@@ -27,11 +27,12 @@ def get(username: str = Query(..., min_length=1, max_length=30, regex='^[a-z0-9_
         try:
             _user: User = parser.get_user(username=username)
             print(f"Caching the result for username {username}")
-            my_redis.setex(
-                name=username,
-                time=3600,
-                value=_user.json()
-            )
+            if _user:
+                my_redis.setex(
+                    name=username,
+                    time=3600,
+                    value=_user.json()
+                )
             print(f"Returning the IGParser's result for username {username}")
             return JSONResponse(
                 content=jsonable_encoder({'data': _user})
