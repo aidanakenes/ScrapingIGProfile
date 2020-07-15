@@ -3,4 +3,4 @@ class ApplicationError(Exception):
 
 
 class RegexError(ApplicationError):
-    message: str = 'invalid regex'
+    message: str = 'Failed to parse regex'

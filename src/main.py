@@ -1,41 +1,42 @@
+import redis
+import json
+import uvicorn
 from fastapi import FastAPI, Request, status, Query
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-import redis
-import json
 from src.parser import IGParser
-from src.err_utils import *
+from src.err_utils import ApplicationError
+from src.models import User
+from src.conf import RedisConfig
 
 app = FastAPI()
 
 
-@app.get(
-    '/profile',
-    description='Get profile info'
-)
+@app.get('/profile', description='Get profile info')
 def get(username: str = Query(..., min_length=1, max_length=30, regex='^[a-z0-9_.]{1,30}$')):
-    my_redis = redis.Redis(host='127.0.0.1', port=6379)
+    my_redis = redis.Redis(**RedisConfig)
     cached = my_redis.get(username)
-    if cached:
+    if cached is not None:
+        print(f"Returning the cached result for username {username}")
         return JSONResponse(
-            status_code=status.HTTP_200_OK,
-            content=jsonable_encoder({'data': json.loads(cached.decode('utf-8'))})
+            content=jsonable_encoder({'data': json.loads(cached)})
         )
     else:
         parser = IGParser()
         try:
-            _user = parser.get_user(username=username)
-            if _user:
-                my_redis.setex(name=username, time=3600,
-                               value=json.dumps(_user.dict(), indent=4, sort_keys=True, ensure_ascii=False))
-
+            _user: User = parser.get_user(username=username)
+            print(f"Caching the result for username {username}")
+            my_redis.setex(
+                name=username,
+                time=3600,
+                value=_user.json()
+            )
+            print(f"Returning the IGParser's result for username {username}")
             return JSONResponse(
-                status_code=status.HTTP_200_OK,
                 content=jsonable_encoder({'data': _user})
             )
-
-        except ApplicationError or redis.AuthenticationError as e:
+        except ApplicationError as e:
             return JSONResponse(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 content=jsonable_encoder(
@@ -63,3 +64,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
             }
         )
     )
+
+if __name__ == '__main__':
+    uvicorn.run('main:app', host='0.0.0.0', port=8080, workers=4)
