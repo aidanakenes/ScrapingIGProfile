@@ -3,7 +3,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 import redis
-import json, ast
+import json
 from src.parser import IGParser
 from src.err_utils import *
 
@@ -26,8 +26,10 @@ def get(username: str = Query(..., min_length=1, max_length=30, regex='^[a-z0-9_
         parser = IGParser()
         try:
             _user = parser.get_user(username=username)
-            my_redis.setex(name=username, time=3600,
-                           value=json.dumps(_user.dict(), indent=4, sort_keys=True, ensure_ascii=False))
+            if _user:
+                my_redis.setex(name=username, time=3600,
+                               value=json.dumps(_user.dict(), indent=4, sort_keys=True, ensure_ascii=False))
+
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
                 content=jsonable_encoder({'data': _user})
