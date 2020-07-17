@@ -1,10 +1,12 @@
 import redis
 import json
+
 import uvicorn
 from fastapi import FastAPI, Request, status, Query
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
+
 from src.parser import IGParser
 from src.err_utils import ApplicationError
 from src.models import User
