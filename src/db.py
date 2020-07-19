@@ -8,5 +8,5 @@ users_collection = my_db['ig_users']
 
 
 def insert_user_db(_user: User):
-    print(f"Saving the result into database for username {_user.username}")
+    print(f"Storing the result into database for username {_user.username}")
     users_collection.update({'id': _user.id}, _user.dict(), upsert=True)
