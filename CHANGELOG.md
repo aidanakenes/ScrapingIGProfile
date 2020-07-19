@@ -6,10 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## 2020-07-14
+## 2020-07-19
 ### Added
-- Redis for caching responses
-- Sample API docs in README.md
+- MongoDB for storing results into database
+- Dockerfile and docker-compose
+- New file ``service.py``
 
 ### Changed
-- `user.json()` instead of `json.loads(user.dict())`
+- methods from ``main.py`` are divided and replaced to ``service.py``
