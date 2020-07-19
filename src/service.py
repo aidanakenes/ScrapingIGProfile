@@ -7,16 +7,17 @@ from src.models import User
 from src.conf import RedisConfig
 
 
+my_redis = redis.Redis(**RedisConfig)
+
+
 def get_cache(username: str):
     print(f"Returning the cached result for username {username}")
-    my_redis = redis.Redis(**RedisConfig)
     cached = my_redis.get(username)
     if cached is not None:
         return User(**json.loads(cached))
 
 
 def save_cache(_user: User):
-    my_redis = redis.Redis(**RedisConfig)
     print(f"Caching the result for username {_user.username}")
     my_redis.setex(
         name=_user.username,
