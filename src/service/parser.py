@@ -1,9 +1,14 @@
 import re
 import json
 import requests
+
 from typing import Optional
-from src.models import User
-from src.err_utils import *
+
+from src.models.models import User
+from src.utils.err_utils import *
+from src.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class IGParser:
@@ -33,7 +38,8 @@ class IGParser:
                     is_private=_user.get('is_private'),
                     profile_picture_url=_user.get('profile_pic_url_hd')
                 )
+                logger.info(f"Returning the IGParser's result for username {username}")
                 return user
-            except ValueError:
+            except Exception as e:
+                logger.error(f'Cannot parse page for {username}: {type(e)}')
                 raise RegexError()
-
