@@ -29,9 +29,11 @@ GET /profile?username=brckhmptn
 
 ### Docker-compose
 __docker-compose.yml__:<br>
-        - **app**
-        - **db**: MongoDB
-        - **cache**: Redis
+```
+        - app
+        - db: MongoDB
+        - cache: Redis
+```
 
 Installation (details in https://docs.docker.com/compose/install/)
 /
