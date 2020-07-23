@@ -22,10 +22,10 @@ def get(username: str = Query(..., min_length=1, max_length=30, regex='^[a-z0-9_
         try:
             parser = IGParser()
             _user: User = parser.get_user(username=username)
-                if _user:
-                    my_redis.save_cache(user=_user)
-                    my_db = DB()
-                    my_db.insert_user(user=_user)
+            if _user:
+                my_redis.save_cache(user=_user)
+                my_db = DB()
+                my_db.insert_user(user=_user)
         except ApplicationError as e:
             return JSONResponse(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -40,7 +40,7 @@ def get(username: str = Query(..., min_length=1, max_length=30, regex='^[a-z0-9_
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
-        content=jsonable_encoder({'error': ValidationError.__dict__})
+        content=jsonable_encoder({'error': ValidationError().__dict__})
     )
 
 
