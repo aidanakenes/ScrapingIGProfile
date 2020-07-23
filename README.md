@@ -27,7 +27,7 @@ GET /profile?username=brckhmptn
 }
 ```
 
-### Docker-compose
+### ```Docker-compose```
 __docker-compose.yml__:<br>
 ```
         - app
