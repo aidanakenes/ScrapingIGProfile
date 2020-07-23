@@ -45,4 +45,4 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 
 if __name__ == '__main__':
-    uvicorn.run('main:app', host='0.0.0.0', port=8080, workers=4, log_level=None)
+    uvicorn.run('main:app', host='0.0.0.0', port=8080, workers=4, log_config=None)
