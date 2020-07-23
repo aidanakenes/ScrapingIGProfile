@@ -26,3 +26,28 @@ GET /profile?username=brckhmptn
     }
 }
 ```
+
+### Docker-compose
+__docker-compose.yml__:<br>
+        - **app**
+        - **db**: MongoDB
+        - **cache**: Redis
+
+Installation (details in https://docs.docker.com/compose/install/)
+/
+```
+sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+```
+Build, (re)create, start, and attache to containers for a service.
+```
+docker-compose up -d --build
+```
+Display log outputs
+```
+docker-compose logs -f
+```
+Stop containers and remove containers, networks, volumes, and images created by **up**
+```
+docker-compose down
+```
