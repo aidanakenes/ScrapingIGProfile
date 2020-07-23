@@ -1,13 +1,17 @@
 class ApplicationError(Exception):
-    code: str = 'APIError',
-    message: str = f'Failed to parse page for username'
+    def __init__(self):
+        self.code = 'APIError',
+        self.message = f'Failed to parse page for username'
 
 
 class RegexError(ApplicationError):
-    message: str = 'Failed to parse regex'
+    def __init__(self):
+        self.code = 'APIError',
+        self.message: str = 'Failed to parse regex'
 
 
 class ValidationError(Exception):
-    code: str = 'BadRequest',
-    message: str = 'Invalid username: username can contain only letters, numbers, '
-    'periods, underscores and be less than 30'
+    def __init__(self):
+        self.code = 'BadRequest',
+        self.message = 'Invalid username: username can contain only letters, numbers, '
+        'periods, underscores and be less than 30'
