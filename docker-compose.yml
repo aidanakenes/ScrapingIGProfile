@@ -1,10 +1,15 @@
-version: '2.0'
+version: '3.0'
 services:
   app:
+    env_file:
+      - .env
     depends_on:
-      - redis
+      - cache
+      - db
     build: .
     ports:
       - 8081:8080
-  redis:
+  cache:
     image: redis:latest
+  db:
+    image: mongo:latest
