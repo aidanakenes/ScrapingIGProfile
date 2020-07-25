@@ -2,10 +2,10 @@ import json
 
 import redis
 
-from src.service.conf import RedisConfig
-from src.models.models import User
+from src.utils.conf import RedisConfig
+from src.models.user import User
 from src.utils.logger import get_logger
-from src.service.conf import REDIS_TTL
+from src.utils.conf import REDIS_TTL
 
 logger = get_logger(__name__)
 
@@ -21,7 +21,7 @@ class Cache:
         if cached is not None:
             return User(**json.loads(cached))
 
-    def save_cache(self, user: User):
+    async def save_cache(self, user: User):
         logger.info(f"Caching the result for username {user.username}")
         self.my_redis.setex(
             name=user.username,
