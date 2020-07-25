@@ -7,15 +7,16 @@ from fastapi.exceptions import RequestValidationError
 
 from src.service.cache import Cache
 from src.service.parser import IGParser
-from src.models.models import User
+from src.models.user import User
 from src.utils.err_utils import ApplicationError, ValidationError
 from src.db.db import DB
+from src.utils.conf import LOGGER_CONFIG
 
 app = FastAPI()
 
 
 @app.get('/profile', description='Get profile info')
-def get(username: str = Query(..., min_length=1, max_length=30, regex='^[a-z0-9_.]{1,30}$')):
+async def get(username: str = Query(..., min_length=1, max_length=30, regex='^[a-z0-9_.]{1,30}$')):
     my_redis = Cache()
     _user = my_redis.get_cache(username=username)
     if _user is None:
@@ -23,9 +24,9 @@ def get(username: str = Query(..., min_length=1, max_length=30, regex='^[a-z0-9_
             parser = IGParser()
             _user: User = parser.get_user(username=username)
             if _user:
-                my_redis.save_cache(user=_user)
                 my_db = DB()
-                my_db.insert_user(user=_user)
+                await my_redis.save_cache(user=_user)
+                await my_db.insert_user(user=_user)
         except ApplicationError as e:
             return JSONResponse(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -45,4 +46,5 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 
 if __name__ == '__main__':
-    uvicorn.run('main:app', host='0.0.0.0', port=8080, workers=4, log_config=None)
+    uvicorn.run('main:app', host='0.0.0.0', port=8080, workers=4, log_config=LOGGER_CONFIG)
+
