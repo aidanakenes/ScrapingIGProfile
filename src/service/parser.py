@@ -1,8 +1,8 @@
 import re
 import json
+from typing import Optional
 
 import requests
-from typing import Optional
 
 from src.models.models import User
 from src.utils.err_utils import *
