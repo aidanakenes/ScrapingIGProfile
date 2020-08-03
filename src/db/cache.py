@@ -16,9 +16,9 @@ class Cache:
         self.my_redis = redis.Redis(**RedisConfig)
 
     def get_cache(self, username: str):
-        logger.info(f"Returning the cached result for username {username}")
         cached = self.my_redis.get(username)
         if cached is not None:
+            logger.info(f"Returning the cached result for username {username}")
             return User(**json.loads(cached))
 
     async def save_cache(self, user: User):
