@@ -4,7 +4,7 @@ from typing import Optional
 
 import requests
 
-from src.models.models import User
+from src.models.user import User
 from src.utils.err_utils import *
 from src.utils.logger import get_logger
 
