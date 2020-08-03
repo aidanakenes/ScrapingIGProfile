@@ -1,12 +1,5 @@
-certifi==2020.6.20
-chardet==3.0.4
-click==7.1.2
-fastapi==0.58.1
-idna==2.10
-pydantic==0.1
-requests==2.24.0
-starlette==0.13.4
-urllib3==1.25.9
-uvicorn==0.11.5
-websockets==8.1
-redis
+pymongo~=3.10.1
+redis~=3.5.3
+uvicorn~=0.11.5
+fastapi~=0.59.0
+requests~=2.24.0
