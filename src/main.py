@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 
-from src.service.cache import Cache
+from src.db.cache import Cache
 from src.service.parser import IGParser
 from src.models.user import User
 from src.utils.err_utils import ApplicationError, ValidationError
